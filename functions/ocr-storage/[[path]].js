@@ -10,7 +10,14 @@ export async function onRequest(context) {
   }
 
   const url = new URL(context.request.url);
-  const targetUrl = "https://paddleocr-store-2.bj.bcebos.com" + url.pathname.replace('/ocr-storage', '') + url.search;
+  const pathParts = url.pathname.split('/');
+  // pathParts[0] = ""
+  // pathParts[1] = "ocr-storage"
+  // pathParts[2] = "paddleocr-store-6.bj.bcebos.com"
+  const host = pathParts[2];
+  const remainingPath = pathParts.slice(3).join('/');
+  
+  const targetUrl = `https://${host}/${remainingPath}${url.search}`;
   
   const headers = new Headers(context.request.headers);
   headers.delete("Origin");
